@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useRef } from 'react';
 import {
   Image,
   View,
@@ -8,6 +8,8 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import { useNavigation } from '@react-navigation/native';
+import { Form } from '@unform/mobile';
+import { FormHandles } from '@unform/core';
 import {
   Container,
   Title,
@@ -23,6 +25,11 @@ import { AuthStack } from '../../routes';
 
 function SignIn(): JSX.Element {
   const { navigate } = useNavigation<AuthStack>();
+  const formRef = useRef<FormHandles>(null);
+  const handleSignIn = useCallback((data: object) => {
+    console.log(data);
+  }, []);
+
   return (
     <>
       <KeyboardAvoidingView
@@ -39,9 +46,13 @@ function SignIn(): JSX.Element {
             <View>
               <Title>Faça seu logon</Title>
             </View>
-            <Input name="email" icon="mail" placeholder="E-mail" />
-            <Input name="password" icon="lock" placeholder="Senha" />
-            <Button onPress={() => console.log('okay')}>Entrar</Button>
+            <Form onSubmit={handleSignIn} ref={formRef}>
+              <Input name="email" icon="mail" placeholder="E-mail" />
+              <Input name="password" icon="lock" placeholder="Senha" />
+            </Form>
+            <Button onPress={() => formRef.current?.submitForm()}>
+              Entrar
+            </Button>
             <ForgotPassword onPress={() => console.log('OKAY')}>
               <ForgotPasswordText>Esqueci minha senha</ForgotPasswordText>
             </ForgotPassword>
