@@ -7,6 +7,7 @@ import {
   ScrollView,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
+import { useNavigation } from '@react-navigation/native';
 import {
   Container,
   Title,
@@ -18,8 +19,10 @@ import {
 import logoImg from '../../assets/logo.png';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
+import { AuthStack } from '../../routes';
 
 function SignIn(): JSX.Element {
+  const { navigate } = useNavigation<AuthStack>();
   return (
     <>
       <KeyboardAvoidingView
@@ -45,7 +48,7 @@ function SignIn(): JSX.Element {
           </Container>
         </ScrollView>
       </KeyboardAvoidingView>
-      <CreateAccountButton onPress={() => console.log('okay')}>
+      <CreateAccountButton onPress={() => navigate('SignUp')}>
         <Icon name="log-in" size={20} color="#ff9000" />
         <CreateAccontButtonText>Criar uma conta</CreateAccontButtonText>
       </CreateAccountButton>
