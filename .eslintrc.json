@@ -26,6 +26,7 @@
     "prettier"
   ],
   "rules": {
+    "eact/jsx-no-constructed-context-values": "off",
     "no-shadow" : "off",
     "react/jsx-props-no-spreading" : "off",
     "react/function-component-definition":"off",

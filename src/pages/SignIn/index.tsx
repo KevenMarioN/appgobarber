@@ -26,6 +26,7 @@ import Input from '../../components/Input';
 import Button from '../../components/Button';
 import { AuthStack } from '../../routes';
 import getValidationErros from '../../utils/getValidationErros';
+import { useAuth } from '../../hooks/useAuth';
 
 interface SignInFormData {
   email: string;
@@ -36,6 +37,8 @@ function SignIn(): JSX.Element {
   const { navigate } = useNavigation<AuthStack>();
   const passwordInputRef = useRef<TextInput>();
   const formRef = useRef<FormHandles>(null);
+  const { signIn } = useAuth();
+
   const handleSignIn = useCallback(
     async (data: SignInFormData): Promise<void> => {
       try {
@@ -52,12 +55,10 @@ function SignIn(): JSX.Element {
         await schema.validate(data, {
           abortEarly: false,
         });
-        // await signIn({
-        //   email: data.email,
-        //   password: data.password,
-        // });
-
-        // navigate('dashboard');
+        await signIn({
+          email: data.email,
+          password: data.password,
+        });
       } catch (err: any) {
         if (err instanceof Yup.ValidationError) {
           const errors = getValidationErros(err);
@@ -70,7 +71,7 @@ function SignIn(): JSX.Element {
         );
       }
     },
-    [],
+    [signIn],
   );
 
   return (
