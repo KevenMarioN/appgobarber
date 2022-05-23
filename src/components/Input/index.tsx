@@ -3,7 +3,6 @@ import { useField } from '@unform/core';
 import React, {
   ForwardedRef,
   forwardRef,
-  MutableRefObject,
   useCallback,
   useEffect,
   useImperativeHandle,
@@ -68,7 +67,7 @@ const Input = forwardRef(
       });
     }, [fieldName, registerField]);
     return (
-      <Container isFocused={isFocused}>
+      <Container isFocused={isFocused} isErrored={!!error}>
         <Icon
           name={icon}
           size={20}
