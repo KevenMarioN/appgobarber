@@ -5,6 +5,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  TextInput,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import { useNavigation } from '@react-navigation/native';
@@ -25,6 +26,7 @@ import { AuthStack } from '../../routes';
 
 function SignIn(): JSX.Element {
   const { navigate } = useNavigation<AuthStack>();
+  const passwordInputRef = useRef<TextInput>();
   const formRef = useRef<FormHandles>(null);
   const handleSignIn = useCallback((data: object) => {
     console.log(data);
@@ -47,8 +49,27 @@ function SignIn(): JSX.Element {
               <Title>Faça seu logon</Title>
             </View>
             <Form onSubmit={handleSignIn} ref={formRef}>
-              <Input name="email" icon="mail" placeholder="E-mail" />
-              <Input name="password" icon="lock" placeholder="Senha" />
+              <Input
+                autoCorrect={false}
+                autoCapitalize="none"
+                keyboardType="email-address"
+                name="email"
+                icon="mail"
+                placeholder="E-mail"
+                returnKeyType="next"
+                onSubmitEditing={() => {
+                  passwordInputRef.current?.focus();
+                }}
+              />
+              <Input
+                ref={passwordInputRef}
+                name="password"
+                icon="lock"
+                placeholder="Senha"
+                secureTextEntry
+                returnKeyType="send"
+                onSubmitEditing={() => formRef.current?.submitForm()}
+              />
             </Form>
             <Button onPress={() => formRef.current?.submitForm()}>
               Entrar
