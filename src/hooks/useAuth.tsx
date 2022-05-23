@@ -11,7 +11,7 @@ import api from '../http/api';
 
 type AuthContextProps = {
   children: ReactNode;
-};
+}; 
 
 interface AuthState {
   token: string;
@@ -25,13 +25,14 @@ interface AuthContextData {
   user: object;
   signIn(credentials: SignInCredentials): Promise<void>;
   signOut(): void;
+  loading: boolean;
 }
 
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
 const AuthProvider = ({ children }: AuthContextProps): JSX.Element => {
   const [data, setData] = useState<AuthState>({} as AuthState);
-
+  const [loading, setLoading] = useState(true);
   const signIn = useCallback(async ({ email, password }: SignInCredentials) => {
     const response = await api.post<AuthState>('sessions', {
       email,
@@ -62,11 +63,12 @@ const AuthProvider = ({ children }: AuthContextProps): JSX.Element => {
       if (token[1] && user[1]) {
         setData({ token: token[1], user: JSON.parse(user[1]) });
       }
+      setLoading(false);
     }
     loadStorageData();
   }, []);
   return (
-    <AuthContext.Provider value={{ user: data.user, signIn, signOut }}>
+    <AuthContext.Provider value={{ user: data.user, signIn, signOut, loading }}>
       {children}
     </AuthContext.Provider>
   );
